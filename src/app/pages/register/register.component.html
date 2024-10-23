@@ -1,0 +1,51 @@
+<h1>Template Driven forms:</h1>
+<h3>Registration form</h3>
+
+<form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+    <p>Form status: {{userForm.status}}</p>
+    <p>Form Details: {{userForm.value | json}}</p>
+
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" 
+        [(ngModel)]="user.name" #nameField="ngModel" required>
+
+        <div *ngIf="nameField.invalid && nameField.touched" style="color: red;">
+            <small>Name is required</small>
+        </div>
+    </div>
+
+    <div>
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email" 
+        [(ngModel)]="user.email" #emailField="ngModel" email required>
+
+        <div *ngIf="emailField.invalid && emailField.touched" style="color: red;">
+            <small *ngIf="emailField.errors?.['required']">Email is required</small>
+            <small *ngIf="emailField.errors?.['email']">Invaild Email address.</small>
+        </div>
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password"
+        [(ngModel)]="user.password" #passwordField="ngModel" minlength="6" required>
+
+        <div *ngIf="passwordField.invalid && passwordField.touched" style="color: red;">
+            <small *ngIf="passwordField.errors?.['required']">Password is required.</small>
+            <small *ngIf="passwordField.errors?.['minlength']">Password must be 6 characters long.</small>
+        </div>
+    </div>
+
+    <div>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" name="confirmPassword" id="confirmPassword" 
+        [(ngModel)]="user.confirmPassword" #confirmPasswordField="ngModel" required>
+
+        <div *ngIf="confirmPasswordField.touched && user.password !== user.confirmPassword " style="color: red;">
+            <small>Passwords do not match.</small>
+        </div>
+    </div>
+
+    <button [disabled]="userForm.invalid || user.password !== user.confirmPassword">Submit</button>
+</form>
